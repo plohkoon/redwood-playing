@@ -6,7 +6,6 @@ WORKDIR /app
 
 COPY package.json .
 COPY yarn.lock .
-
 COPY redwood.toml .
 COPY graphql.config.js .
 COPY babel.config.js .

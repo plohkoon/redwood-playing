@@ -1,0 +1,10 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@envelop/response-cache": "^0.5.1",
+    "@redwoodjs/api": "0.38.0",
+    "@redwoodjs/graphql-server": "0.38.0"
+  }
+}

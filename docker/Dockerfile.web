@@ -1,0 +1,49 @@
+# ==
+# Build
+FROM node:16-alpine as build
+
+WORKDIR /app
+
+COPY package.json .
+COPY yarn.lock .
+
+COPY redwood.toml .
+COPY graphql.config.js .
+COPY babel.config.js .
+
+COPY web/package.json web/package.json
+
+RUN yarn install --frozen-lockfile
+
+COPY web web
+
+RUN yarn rw build web
+
+# NGINX
+FROM nginx:1.21.4-alpine
+
+RUN mkdir /www
+
+COPY --from=build /app/web/dist /www/
+
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 3000
+
+# This is if we want/need to serve web with redwood. nginx should be sufficient though
+# If this is used nginx would need to be separately configured container
+# #==
+# # Serve
+# FROM node:16-alpine
+
+# WORKDIR /app
+
+# COPY redwood.toml .
+
+# COPY --from=build /app/web/dist web/dist
+
+# RUN yarn add react react-dom @redwoodjs/cli
+
+# EXPOSE 8910
+
+# CMD [ "yarn", "rw", "serve", "web" ]
